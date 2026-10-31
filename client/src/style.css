@@ -1,0 +1,1290 @@
+/* A Pahari miniature at night: lapis sky, gold leaf, a sindoor border. */
+:root {
+  --night-deep: #0a1230;
+  --lapis: #1b2a63;
+  --gold: #d9ae52;
+  --gold-soft: #ecd28f;
+  --ash: #ede6d3;
+  --ash-dim: #b7b2a4;
+  --sindoor: #c73a2c;
+  --sindoor-soft: #ef7a6a;
+  --ember: #f2913d;
+  --band-color: #6e1e1a;
+  --band: 10px;
+  --bw: clamp(100px, 10.5vw, 160px);
+  --font-display: 'Rozha One', 'Noto Serif Oriya', Georgia, serif;
+  --font-body: 'Spectral', 'Noto Serif Oriya', Georgia, serif;
+  --font-odia: 'Noto Serif Oriya', 'Spectral', serif;
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  background: var(--night-deep);
+  color: var(--ash);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* The painted scene */
+
+.stage {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  background: linear-gradient(180deg, #060c26 0%, #0d1842 40%, #1a2860 72%, #33284f 88%, #4a2630 100%);
+}
+
+.stage.quake {
+  animation: quake 0.6s ease-in-out;
+}
+
+.sky {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.moon {
+  position: absolute;
+  top: 9vh;
+  left: 38vw;
+  width: clamp(64px, 10vmin, 118px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 36%, #fcf9ef, #e0dccf 62%, #c8c3b5);
+  box-shadow:
+    0 0 40px 10px rgba(225, 230, 255, 0.2),
+    0 0 140px 50px rgba(150, 170, 255, 0.1);
+}
+
+.skyline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 38vh;
+}
+
+.skyline svg,
+.tree svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.tree {
+  position: absolute;
+  right: -2vw;
+  bottom: 0;
+  height: 94vh;
+  aspect-ratio: 600 / 820;
+}
+
+.tree .flutter {
+  transform-box: fill-box;
+  transform-origin: 50% 0;
+  animation: flutter 3.6s ease-in-out infinite alternate;
+}
+
+.pyre {
+  position: absolute;
+  left: 52vw;
+  bottom: 5vh;
+  width: clamp(70px, 8vw, 116px);
+  aspect-ratio: 1;
+  transform: translateX(-50%);
+}
+
+.pyre-glow {
+  position: absolute;
+  inset: -110% -170%;
+  background: radial-gradient(ellipse at 50% 72%, rgba(242, 145, 61, 0.34), rgba(199, 58, 44, 0.1) 42%, transparent 70%);
+  animation: glow 2.4s ease-in-out infinite alternate;
+}
+
+.pyre-fire {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.flame {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: flicker 0.9s ease-in-out infinite alternate;
+  filter: drop-shadow(0 0 6px rgba(242, 145, 61, 0.7));
+}
+
+.flame-mid {
+  animation-duration: 0.7s;
+  animation-delay: -0.3s;
+}
+
+.flame-core {
+  animation-duration: 0.5s;
+  animation-delay: -0.6s;
+}
+
+.fog {
+  position: absolute;
+  left: -20%;
+  right: -20%;
+  pointer-events: none;
+  filter: blur(10px);
+}
+
+.fog-far {
+  bottom: 20vh;
+  height: 24vh;
+  background:
+    radial-gradient(ellipse 30% 50% at 28% 55%, rgba(170, 182, 216, 0.16), transparent 70%),
+    radial-gradient(ellipse 26% 40% at 72% 60%, rgba(170, 182, 216, 0.12), transparent 70%);
+  animation: drift 70s linear infinite alternate;
+}
+
+.fog-near {
+  bottom: -6vh;
+  height: 22vh;
+  background:
+    radial-gradient(ellipse 34% 60% at 20% 60%, rgba(190, 198, 226, 0.18), transparent 70%),
+    radial-gradient(ellipse 30% 50% at 64% 70%, rgba(190, 198, 226, 0.14), transparent 70%);
+  animation: drift 48s linear infinite alternate-reverse;
+}
+
+/* Betaal */
+
+.betaal {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 5;
+  width: var(--bw);
+  height: calc(var(--bw) * 1.5);
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  filter: drop-shadow(0 0 16px rgba(159, 180, 255, 0.3));
+  transition: filter 0.4s;
+}
+
+.betaal:disabled {
+  cursor: default;
+  pointer-events: none;
+}
+
+.betaal:not(:disabled) {
+  filter: drop-shadow(0 0 22px rgba(242, 145, 61, 0.55));
+}
+
+.betaal:focus-visible {
+  outline: 2px solid var(--gold-soft);
+  outline-offset: 6px;
+  border-radius: 40%;
+}
+
+.betaal.is-flying {
+  filter: drop-shadow(0 0 30px rgba(159, 180, 255, 0.7));
+}
+
+.betaal-body {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.betaal[data-place='tree'] .betaal-body {
+  transform-origin: 50% 100%;
+  animation: sway 4.6s ease-in-out infinite alternate;
+}
+
+.betaal[data-place='shoulder'] .betaal-body {
+  animation: bob 3.2s ease-in-out infinite alternate;
+}
+
+.betaal-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.b-eyes {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: blink 6s infinite;
+}
+
+.b-pupils {
+  transform: translate(var(--px, 0), var(--py, 0));
+  transition: transform 0.25s ease-out;
+}
+
+.b-brow-l,
+.b-brow-r {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform 0.3s;
+}
+
+.b-mouth {
+  display: none;
+}
+
+.betaal[data-mood='idle'] .b-mouth-smirk,
+.betaal[data-mood='smug'] .b-mouth-smirk,
+.betaal[data-mood='laugh'] .b-mouth-laugh,
+.betaal[data-mood='angry'] .b-mouth-frown,
+.betaal[data-mood='think'] .b-mouth-o {
+  display: inline;
+}
+
+.betaal[data-mood='talk'] .b-mouth-talk {
+  display: inline;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: talk 0.26s ease-in-out infinite alternate;
+}
+
+.betaal[data-mood='laugh'] .betaal-svg {
+  animation: cackle 0.16s ease-in-out infinite alternate;
+}
+
+.betaal[data-mood='laugh'] .b-eyes {
+  animation: none;
+  transform: scaleY(0.45);
+}
+
+.betaal[data-mood='angry'] .b-brow-l {
+  transform: translateY(3px) rotate(18deg);
+}
+
+.betaal[data-mood='angry'] .b-brow-r {
+  transform: translateY(3px) rotate(-18deg);
+}
+
+.betaal[data-mood='angry'] .b-pupils circle {
+  fill: #ff4a3a;
+}
+
+.betaal[data-mood='think'] .b-pupils {
+  transform: translate(-2.5px, -3px);
+}
+
+.betaal[data-mood='smug'] .b-brow-r {
+  transform: translateY(-4px) rotate(-8deg);
+}
+
+/* While his voice plays, Betaal's mouth moves, whatever his mood (except mid-cackle). */
+.betaal.is-speaking:not([data-mood='laugh']) .b-mouth {
+  display: none;
+}
+
+.betaal.is-speaking:not([data-mood='laugh']) .b-mouth-talk {
+  display: inline;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: talk 0.26s ease-in-out infinite alternate;
+}
+
+/* The miniature's painted border */
+
+.frame {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  pointer-events: none;
+  border: var(--band) solid var(--band-color);
+  outline: 1px solid var(--gold);
+  outline-offset: -1px;
+}
+
+.frame::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 1.5px solid var(--gold);
+}
+
+.frame::after {
+  content: '';
+  position: absolute;
+  inset: calc(var(--band) / -2 - 1px);
+  border: 2px dotted rgba(236, 210, 143, 0.55);
+}
+
+.flash {
+  position: fixed;
+  inset: 0;
+  z-index: 19;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(circle, rgba(199, 58, 44, 0.05), rgba(199, 58, 44, 0.6));
+}
+
+.flash.on {
+  animation: flash 0.8s ease-out;
+}
+
+/* Panels */
+
+.ui {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.panel {
+  position: absolute;
+  pointer-events: auto;
+  background: linear-gradient(180deg, rgba(18, 28, 69, 0.9), rgba(9, 16, 44, 0.93));
+  border: 1px solid rgba(217, 174, 82, 0.55);
+  outline: 1px solid rgba(217, 174, 82, 0.22);
+  outline-offset: -7px;
+  border-radius: 3px;
+  box-shadow: 0 30px 60px -24px rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(6px);
+}
+
+.title-card {
+  left: max(6vw, calc(var(--band) + 16px));
+  top: 50%;
+  transform: translateY(-50%);
+  width: min(620px, 50vw);
+  max-height: calc(100dvh - 2 * var(--band) - 32px);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(217, 174, 82, 0.5) transparent;
+  padding: 8px 4px;
+  background: none;
+  border: 0;
+  outline: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+.title {
+  margin: 0;
+  font-weight: 400;
+}
+
+.title-odia {
+  display: block;
+  font-family: var(--font-odia);
+  font-weight: 900;
+  font-size: clamp(2.6rem, 5.2vw, 5rem);
+  line-height: 1.25;
+  color: var(--gold);
+  text-shadow: 0 3px 0 var(--band-color);
+}
+
+.title-latin {
+  display: block;
+  margin-top: 0.15em;
+  font-family: var(--font-display);
+  font-size: clamp(1.3rem, 2.4vw, 1.9rem);
+  color: var(--ash);
+}
+
+.lede {
+  max-width: 52ch;
+  margin: 1rem 0 1.3rem;
+  font-size: 1.08rem;
+  line-height: 1.72;
+  text-shadow: 0 1px 12px rgba(6, 12, 38, 0.9);
+}
+
+.name-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 340px;
+  margin-bottom: 1.1rem;
+}
+
+.name-field span {
+  font-family: var(--font-display);
+  color: var(--ash-dim);
+}
+
+.name-field input {
+  padding: 9px 14px;
+  color: var(--ash);
+  background: rgba(6, 12, 36, 0.72);
+  border: 1px solid rgba(217, 174, 82, 0.45);
+  border-radius: 6px;
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+}
+
+.name-field input:focus {
+  outline: 2px solid rgba(217, 174, 82, 0.4);
+  border-color: var(--gold);
+}
+
+.langs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 1rem;
+  padding: 0;
+  border: 0;
+}
+
+.langs legend {
+  float: left;
+  width: 100%;
+  margin-bottom: 8px;
+  padding: 0;
+  font-family: var(--font-display);
+  color: var(--ash-dim);
+}
+
+.langs label,
+.check {
+  position: relative;
+  cursor: pointer;
+}
+
+.langs input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.langs span {
+  display: inline-block;
+  padding: 7px 18px;
+  border: 1px solid rgba(217, 174, 82, 0.5);
+  border-radius: 999px;
+  background: rgba(9, 16, 44, 0.6);
+  transition: background 0.2s, color 0.2s;
+}
+
+.langs input:checked + span {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: #1a1405;
+}
+
+.langs input:focus-visible + span {
+  outline: 2px solid var(--gold-soft);
+  outline-offset: 2px;
+}
+
+.options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  margin-bottom: 1.5rem;
+}
+
+.check {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--ash-dim);
+}
+
+.check input {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: var(--gold);
+}
+
+.fine {
+  max-width: 46ch;
+  margin: 1rem 0 0;
+  font-size: 0.92rem;
+  color: var(--ash-dim);
+}
+
+/* Buttons: primary actions take the arched shape of a jharokha window. */
+
+.btn {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  line-height: 1.2;
+  padding: 12px 22px 11px;
+  cursor: pointer;
+  transition: filter 0.2s, background 0.2s;
+}
+
+.btn:focus-visible,
+.icon-btn:focus-visible {
+  outline: 2px solid var(--gold-soft);
+  outline-offset: 3px;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  color: #1a1405;
+  background: linear-gradient(180deg, #e9c56d, #c8953a);
+  border: 1px solid #f0d58f;
+  border-radius: 26px 26px 6px 6px;
+  box-shadow: 0 8px 22px -8px rgba(217, 174, 82, 0.7);
+}
+
+.btn-primary:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+
+.btn-ghost {
+  color: var(--ash);
+  background: transparent;
+  border: 1px solid rgba(217, 174, 82, 0.55);
+  border-radius: 999px;
+}
+
+.btn-ghost:hover:not(:disabled) {
+  background: rgba(217, 174, 82, 0.12);
+}
+
+.btn-quiet {
+  color: var(--sindoor-soft);
+  background: none;
+  border: 0;
+  border-radius: 4px;
+  padding-inline: 8px;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/* Between tales */
+
+.tree-card {
+  left: max(6vw, calc(var(--band) + 16px));
+  bottom: calc(var(--band) + 92px);
+  width: min(440px, 44vw);
+  padding: 22px 26px;
+}
+
+.tale-count {
+  margin: 0 0 6px;
+  font-family: var(--font-display);
+  color: var(--gold);
+}
+
+.narration {
+  margin: 0 0 18px;
+  font-size: 1.1rem;
+  font-style: italic;
+  line-height: 1.62;
+}
+
+/* The folio where Betaal's tale is written */
+
+.folio {
+  left: max(5vw, calc(var(--band) + 16px));
+  top: calc(var(--band) + 28px);
+  bottom: calc(var(--band) + 84px);
+  width: min(620px, 52vw);
+  display: flex;
+  flex-direction: column;
+}
+
+.shoulder {
+  position: absolute;
+  top: 10px;
+  right: calc(-1 * var(--bw) - 18px);
+  width: var(--bw);
+  height: calc(var(--bw) * 1.5);
+}
+
+.folio-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 30px 34px 28px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(217, 174, 82, 0.5) transparent;
+}
+
+.status {
+  margin: 0 0 14px;
+  font-style: italic;
+  color: var(--ash-dim);
+}
+
+.status.is-error {
+  font-style: normal;
+  color: var(--sindoor-soft);
+}
+
+.status:empty,
+.opening:empty,
+.tale-title:empty,
+.riddle:empty,
+.folio-actions:empty {
+  display: none;
+}
+
+.opening {
+  margin: 0 0 18px;
+  font-size: 1.08rem;
+  font-style: italic;
+  line-height: 1.7;
+  color: var(--ash);
+  opacity: 0.9;
+}
+
+.tale-title {
+  margin: 0 0 14px;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(1.6rem, 2.3vw, 2.1rem);
+  line-height: 1.18;
+  color: var(--gold);
+}
+
+.tale p {
+  max-width: 62ch;
+  margin: 0 0 1em;
+  font-size: 1.125rem;
+  line-height: 1.8;
+  text-wrap: pretty;
+}
+
+.riddle {
+  margin: 6px 0 20px;
+  padding: 4px 0 4px 16px;
+  border-left: 3px solid var(--sindoor);
+  font-size: 1.2rem;
+  line-height: 1.66;
+  color: var(--gold-soft);
+}
+
+.line {
+  margin: 0 0 14px;
+  font-size: 1.06rem;
+  line-height: 1.66;
+}
+
+.line .who {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-style: normal;
+  color: var(--ash-dim);
+}
+
+.line.vikram {
+  font-style: italic;
+  color: var(--gold-soft);
+}
+
+.answer textarea,
+.ask input {
+  width: 100%;
+  color: var(--ash);
+  background: rgba(6, 12, 36, 0.72);
+  border: 1px solid rgba(217, 174, 82, 0.45);
+  border-radius: 6px;
+  font-family: var(--font-body);
+  font-size: 1.08rem;
+  line-height: 1.6;
+}
+
+.answer textarea {
+  min-height: 96px;
+  padding: 12px 14px;
+  resize: vertical;
+}
+
+.answer textarea:focus,
+.ask input:focus {
+  outline: 2px solid rgba(217, 174, 82, 0.4);
+  border-color: var(--gold);
+}
+
+.answer textarea::placeholder,
+.ask input::placeholder {
+  color: rgba(183, 178, 164, 0.7);
+}
+
+.answer.shake {
+  animation: shake 0.4s;
+}
+
+.answer-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.ask {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.ask input {
+  flex: 1;
+  min-width: 0;
+  padding: 10px 12px;
+}
+
+.hint {
+  margin: 10px 0 0;
+  font-size: 0.86rem;
+  color: var(--ash-dim);
+}
+
+.verdict-head {
+  margin: 0 0 10px;
+  font-family: var(--font-display);
+  font-size: 1.65rem;
+  line-height: 1.2;
+}
+
+.verdict[data-verdict='wise'] .verdict-head {
+  color: var(--gold);
+}
+
+.verdict[data-verdict='partial'] .verdict-head {
+  color: var(--gold-soft);
+}
+
+.verdict[data-verdict='foolish'] .verdict-head,
+.verdict[data-verdict='silent'] .verdict-head {
+  color: var(--sindoor-soft);
+}
+
+.verdict-reply {
+  margin: 0 0 18px;
+  font-size: 1.1rem;
+  line-height: 1.74;
+}
+
+.wisdom-label {
+  margin: 0 0 4px;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1rem;
+  color: var(--ash-dim);
+}
+
+.wisdom {
+  margin: 0;
+  font-style: italic;
+  line-height: 1.72;
+}
+
+.folio-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+/* Dawn: the end of the night */
+
+.end-card {
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: min(640px, calc(100vw - 2 * var(--band) - 32px));
+  max-height: calc(100dvh - 2 * var(--band) - 110px);
+  overflow-y: auto;
+  padding: 44px 40px 30px;
+  border-radius: 320px 320px 4px 4px / 90px 90px 4px 4px;
+}
+
+.end-outcome {
+  margin: 0 auto 18px;
+  max-width: 48ch;
+  font-style: italic;
+  text-align: center;
+  color: var(--ash-dim);
+}
+
+.end-named {
+  margin: 0;
+  font-family: var(--font-display);
+  text-align: center;
+  color: var(--ash-dim);
+}
+
+.end-title {
+  margin: 4px 0 10px;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2.1rem, 5vw, 3.3rem);
+  line-height: 1.12;
+  text-align: center;
+  color: var(--gold);
+  text-shadow: 0 3px 0 var(--band-color);
+}
+
+.end-trait {
+  max-width: 48ch;
+  margin: 0 auto 18px;
+  font-style: italic;
+  text-align: center;
+  color: var(--gold-soft);
+}
+
+.end-farewell {
+  margin: 0 0 22px;
+  font-size: 1.08rem;
+  line-height: 1.76;
+}
+
+.ledger {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: tale;
+}
+
+.ledger li {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 2px 16px;
+  padding: 10px 0;
+  border-top: 1px solid rgba(217, 174, 82, 0.2);
+  counter-increment: tale;
+}
+
+.ledger .l-title::before {
+  content: counter(tale) '. ';
+  color: var(--ash-dim);
+}
+
+.ledger .l-answer {
+  grid-column: 1;
+  font-size: 0.93rem;
+  font-style: italic;
+  color: var(--ash-dim);
+}
+
+.ledger .l-verdict {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  align-self: center;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+}
+
+.ledger [data-verdict='wise'] {
+  color: var(--gold);
+}
+
+.ledger [data-verdict='partial'] {
+  color: var(--gold-soft);
+}
+
+.ledger [data-verdict='foolish'],
+.ledger [data-verdict='silent'] {
+  color: var(--sindoor-soft);
+}
+
+.end-score {
+  margin: 18px 0;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  text-align: center;
+  color: var(--gold);
+}
+
+.end-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+/* Lamps for tales heard, and the king's crown */
+
+.hud {
+  position: fixed;
+  left: var(--band);
+  right: var(--band);
+  bottom: var(--band);
+  z-index: 12;
+  height: 66px;
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  padding: 0 24px;
+  background: linear-gradient(0deg, rgba(6, 12, 36, 0.88), transparent);
+}
+
+.diyas {
+  display: flex;
+  gap: 10px;
+}
+
+.diya {
+  width: 30px;
+  height: 30px;
+  overflow: visible;
+}
+
+.diya .bowl {
+  fill: #5b3a2b;
+  stroke: #8c5a3b;
+  stroke-width: 1;
+}
+
+.diya .flame-d {
+  display: none;
+  fill: var(--ember);
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  filter: drop-shadow(0 0 4px rgba(242, 145, 61, 0.9));
+  animation: flicker 0.8s ease-in-out infinite alternate;
+}
+
+.diya.lit .bowl {
+  fill: #a0603a;
+}
+
+.diya.lit .flame-d {
+  display: inline;
+}
+
+.diya.current .bowl {
+  stroke: var(--gold);
+  stroke-width: 1.5;
+}
+
+.crown-wrap svg {
+  display: block;
+  width: 54px;
+  height: 40px;
+  overflow: visible;
+}
+
+.crown-body {
+  fill: var(--gold);
+  stroke: #8a6a22;
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+}
+
+.crown-band {
+  fill: #b8862e;
+}
+
+.crack {
+  fill: none;
+  stroke: #1a0e08;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.crown-wrap[data-cracks='1'] .crack-1,
+.crown-wrap[data-cracks='2'] .crack-1,
+.crown-wrap[data-cracks='2'] .crack-2,
+.crown-wrap[data-cracks='3'] .crack {
+  opacity: 1;
+}
+
+.crown-wrap.hit {
+  animation: shake 0.5s;
+}
+
+.crown-wrap.burst svg {
+  animation: burst 1s forwards;
+}
+
+.hud-toggles {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.hud-note {
+  max-width: 46ch;
+  margin: 0 0 0 auto;
+  font-size: 0.86rem;
+  line-height: 1.4;
+  text-align: right;
+  color: var(--gold-soft);
+  transition: opacity 0.6s;
+}
+
+.hud-note:empty {
+  display: none;
+}
+
+.hud-note:not(:empty) + .hud-toggles {
+  margin-left: 12px;
+}
+
+.icon-btn {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  color: var(--ash);
+  background: rgba(9, 16, 44, 0.7);
+  border: 1px solid rgba(217, 174, 82, 0.45);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.icon-btn svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.icon-btn[aria-pressed='false'] {
+  color: var(--ash-dim);
+  opacity: 0.6;
+}
+
+.icon-btn[aria-pressed='false'] .on {
+  display: none;
+}
+
+/* Odia script: its own typeface, and no fake italics (Odia has none). */
+
+html[lang='or'] .tale-title,
+html[lang='or'] .end-title {
+  font-family: var(--font-odia);
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+html[lang='or'] .opening,
+html[lang='or'] .narration,
+html[lang='or'] .status,
+html[lang='or'] .line.vikram,
+html[lang='or'] .wisdom,
+html[lang='or'] .end-trait,
+html[lang='or'] .l-answer {
+  font-style: normal;
+}
+
+html[lang='or'] .tale p,
+html[lang='or'] .opening,
+html[lang='or'] .verdict-reply,
+html[lang='or'] .end-farewell {
+  line-height: 1.9;
+}
+
+/* Motion */
+
+@keyframes sway {
+  from { transform: rotate(-4deg); }
+  to { transform: rotate(4deg); }
+}
+
+@keyframes bob {
+  from { transform: translateY(-4px) rotate(-1.5deg); }
+  to { transform: translateY(5px) rotate(1.5deg); }
+}
+
+@keyframes blink {
+  0%, 95%, 100% { transform: scaleY(1); }
+  97.5% { transform: scaleY(0.1); }
+}
+
+@keyframes talk {
+  from { transform: scaleY(0.35); }
+  to { transform: scaleY(1.1); }
+}
+
+@keyframes cackle {
+  from { transform: rotate(-3deg) translateY(-1px); }
+  to { transform: rotate(3deg) translateY(1px); }
+}
+
+@keyframes flutter {
+  from { transform: rotate(-9deg); }
+  to { transform: rotate(9deg); }
+}
+
+@keyframes flicker {
+  0% { transform: scale(1, 1) skewX(0); }
+  50% { transform: scale(0.94, 1.08) skewX(2deg); }
+  100% { transform: scale(1.04, 0.95) skewX(-2deg); }
+}
+
+@keyframes glow {
+  from { opacity: 0.75; }
+  to { opacity: 1; }
+}
+
+@keyframes drift {
+  from { transform: translateX(-6%); }
+  to { transform: translateX(6%); }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-7px); }
+  40% { transform: translateX(6px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(3px); }
+}
+
+@keyframes quake {
+  0%, 100% { transform: translate(0, 0); }
+  20% { transform: translate(-10px, 6px); }
+  40% { transform: translate(8px, -6px); }
+  60% { transform: translate(-6px, -4px); }
+  80% { transform: translate(5px, 4px); }
+}
+
+@keyframes flash {
+  0% { opacity: 0; }
+  15% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes burst {
+  0% { transform: scale(1); opacity: 1; filter: blur(0); }
+  30% { transform: scale(1.5) rotate(-8deg); opacity: 1; }
+  100% { transform: scale(2.6) rotate(14deg); opacity: 0; filter: blur(4px); }
+}
+
+/* Phones */
+
+@media (max-width: 760px) {
+  :root {
+    --band: 6px;
+    --bw: 76px;
+  }
+
+  .moon {
+    left: auto;
+    right: 12vw;
+    top: 5vh;
+  }
+
+  .tree {
+    height: 62vh;
+    right: -16vw;
+  }
+
+  .pyre {
+    left: 30vw;
+  }
+
+  .title-card {
+    left: calc(var(--band) + 16px);
+    right: calc(var(--band) + 16px);
+    top: auto;
+    bottom: calc(var(--band) + 16px);
+    transform: none;
+    width: auto;
+    padding: 20px 18px;
+    background: linear-gradient(180deg, rgba(10, 18, 48, 0.55), rgba(9, 16, 44, 0.92) 30%);
+  }
+
+  .tree-card {
+    left: calc(var(--band) + 16px);
+    right: calc(var(--band) + 16px);
+    top: calc(var(--band) + 16px);
+    bottom: auto;
+    width: auto;
+    padding: 18px 20px;
+  }
+
+  .folio {
+    left: calc(var(--band) + 10px);
+    right: calc(var(--band) + 10px);
+    top: 20vh;
+    bottom: calc(var(--band) + 66px);
+    width: auto;
+  }
+
+  .shoulder {
+    top: calc(-1 * var(--bw) * 0.95);
+    right: 6px;
+  }
+
+  .folio-scroll {
+    padding: 22px 18px 22px;
+  }
+
+  .tale p {
+    font-size: 1.06rem;
+    line-height: 1.74;
+  }
+
+  .end-card {
+    padding: 34px 20px 24px;
+    border-radius: 200px 200px 4px 4px / 60px 60px 4px 4px;
+  }
+
+  .hud {
+    padding: 0 14px;
+  }
+
+  .hud-note {
+    font-size: 0.72rem;
+  }
+
+  .diyas {
+    gap: 6px;
+  }
+
+  .diya {
+    width: 24px;
+    height: 24px;
+  }
+
+  .crown-wrap svg {
+    width: 44px;
+    height: 32px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

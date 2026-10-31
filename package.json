@@ -1,0 +1,28 @@
+{
+  "name": "vikram-aur-betaal",
+  "version": "1.0.0",
+  "description": "Carry the ghost, hear his tale, answer his riddle. A Vikram and Betaal game in English and Odia, with tales told live by Gemma 4.",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently -k -n api,web -c yellow,blue \"tsx watch server/index.ts\" \"vite\"",
+    "build": "vite build",
+    "start": "vite build && tsx server/index.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test server/sections.test.ts"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@google/genai": "^2.32.0",
+    "dotenv": "^18.0.9",
+    "express": "^5.3.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^26.6.6",
+    "concurrently": "^10.0.6",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.5"
+  }
+}

@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Vikram and Betaal</title>
+    <meta name="description" content="Carry the ghost, hear his tale, answer his riddle. A Vikram and Betaal game in English and Odia, with tales told live by Gemma 4." />
+    <meta name="theme-color" content="#0a1230" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Oriya:wght@400;700;900&family=Rozha+One&family=Spectral:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%231b2a63'/><ellipse cx='16' cy='14' rx='8' ry='9' fill='%23ede6d3'/><circle cx='13' cy='13' r='2' fill='%23f2913d'/><circle cx='19' cy='13' r='2' fill='%23f2913d'/></svg>" />
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <div class="stage" id="stage" aria-hidden="true">
+      <canvas class="sky" id="sky"></canvas>
+      <div class="moon"></div>
+      <div class="skyline" id="skyline"></div>
+      <div class="fog fog-far"></div>
+      <div class="tree" id="tree"></div>
+      <div class="pyre" id="pyre"></div>
+      <div class="fog fog-near"></div>
+    </div>
+
+    <button class="betaal" id="betaal" type="button" data-place="tree" data-mood="idle" aria-label="Cut Betaal down from the peepal tree" disabled></button>
+    <div class="frame" aria-hidden="true"></div>
+    <div class="flash" id="flash" aria-hidden="true"></div>
+
+    <main class="ui">
+      <section class="panel title-card" id="title-card">
+        <h1 class="title">
+          <span class="title-odia" lang="or">ବିକ୍ରମ ଓ ବେତାଳ</span>
+          <span class="title-latin">Vikram and Betaal</span>
+        </h1>
+        <p class="lede">
+          Every night King Vikram cuts the ghost Betaal down from a peepal tree and carries him away. Every night Betaal tells
+          him a tale that ends in a riddle. Answer, and the ghost escapes back to his tree. Know the answer and stay silent, and
+          your head bursts into a thousand pieces.
+        </p>
+        <label class="name-field">
+          <span>What should Betaal call you?</span>
+          <input id="opt-name" maxlength="32" autocomplete="nickname" placeholder="Vikram" />
+        </label>
+        <fieldset class="langs">
+          <legend>Betaal speaks</legend>
+          <label><input type="radio" name="lang" value="en" /><span>English</span></label>
+          <label><input type="radio" name="lang" value="odia" /><span lang="or">ଓଡ଼ିଆ</span></label>
+          <label><input type="radio" name="lang" value="odia-roman" /><span>Odia in English letters</span></label>
+        </fieldset>
+        <div class="options">
+          <label class="check"><input type="checkbox" id="opt-sound" checked /><span>Night sounds</span></label>
+          <label class="check"><input type="checkbox" id="opt-voice" checked /><span>Hear Betaal's voice</span></label>
+        </div>
+        <button class="btn btn-primary" id="begin" type="button">Walk into the cremation ground</button>
+        <p class="fine">Every tale is written live by Gemma 4, Google's open model, so no two nights are the same. Betaal's voice comes from Gemini speech.</p>
+      </section>
+
+      <section class="panel tree-card" id="tree-card" hidden>
+        <p class="tale-count" id="tale-count"></p>
+        <p class="narration" id="tree-line"></p>
+        <button class="btn btn-primary" id="lift" type="button">Cut Betaal down</button>
+      </section>
+
+      <section class="story-stage" id="story-stage" hidden aria-label="The tale, painted as a pattachitra puppet show"></section>
+
+      <article class="panel folio" id="folio" hidden>
+        <div class="shoulder" id="shoulder" aria-hidden="true"></div>
+        <div class="folio-scroll" id="folio-scroll">
+          <p class="status" id="status" role="status"></p>
+          <p class="opening" id="opening"></p>
+          <h2 class="tale-title" id="tale-title"></h2>
+          <div class="tale" id="tale"></div>
+          <p class="riddle" id="riddle"></p>
+          <div class="dialogue" id="dialogue"></div>
+
+          <form class="answer" id="answer-form" hidden>
+            <label class="sr-only" for="answer">Your answer to Betaal's riddle</label>
+            <textarea id="answer" rows="3" maxlength="600" placeholder="Speak, Rajan. Give your answer and your reason."></textarea>
+            <div class="answer-actions">
+              <button class="btn btn-primary" id="speak" type="submit">Speak your answer</button>
+              <button class="btn btn-ghost" id="ask-toggle" type="button" aria-expanded="false">Ask Betaal a question</button>
+              <button class="btn btn-quiet" id="silent" type="button">Stay silent</button>
+            </div>
+            <div class="ask" id="ask-box" hidden>
+              <label class="sr-only" for="ask-input">Your question about the tale</label>
+              <input id="ask-input" maxlength="200" autocomplete="off" placeholder="Ask about the tale. He won't give the answer away." />
+              <button class="btn btn-ghost" id="ask-send" type="button">Ask</button>
+            </div>
+            <p class="hint">Ctrl + Enter speaks your answer.</p>
+          </form>
+
+          <section class="verdict" id="verdict" hidden>
+            <p class="verdict-head" id="verdict-head"></p>
+            <p class="verdict-reply" id="verdict-reply"></p>
+            <h3 class="wisdom-label">What Betaal had in mind</h3>
+            <p class="wisdom" id="wisdom"></p>
+          </section>
+
+          <div class="folio-actions" id="folio-actions"></div>
+        </div>
+      </article>
+
+      <section class="panel end-card" id="end-card" hidden>
+        <p class="end-outcome" id="end-outcome"></p>
+        <div class="end-name" id="end-name" hidden>
+          <p class="end-named">Betaal names you</p>
+          <h2 class="end-title" id="end-title"></h2>
+          <p class="end-trait" id="end-trait"></p>
+          <p class="end-farewell" id="end-farewell"></p>
+        </div>
+        <ol class="ledger" id="ledger"></ol>
+        <p class="end-score" id="end-score"></p>
+        <div class="end-actions" id="end-actions">
+          <button class="btn btn-primary" id="again" type="button">Start a new night</button>
+          <button class="btn btn-ghost" id="copy" type="button" hidden>Copy your title</button>
+        </div>
+      </section>
+    </main>
+
+    <footer class="hud" id="hud" hidden>
+      <div class="diyas" id="diyas" role="img"></div>
+      <div class="crown-wrap" id="crown-wrap" role="img" data-cracks="0">
+        <svg class="crown" viewBox="0 0 64 46" aria-hidden="true">
+          <path class="crown-body" d="M6 38 L4 14 L16 24 L24 6 L32 20 L40 6 L48 24 L60 14 L58 38 Z" />
+          <rect class="crown-band" x="5" y="36" width="54" height="7" rx="1.5" />
+          <circle cx="32" cy="30" r="3.2" fill="#c73a2c" />
+          <circle cx="18" cy="31" r="2.2" fill="#2e6fa7" />
+          <circle cx="46" cy="31" r="2.2" fill="#2e6fa7" />
+          <path class="crack crack-1" d="M24 8 L27 16 L23 22 L28 31" />
+          <path class="crack crack-2" d="M48 24 L44 29 L49 33 L45 41" />
+          <path class="crack crack-3" d="M11 18 L15 26 L10 31 L14 40" />
+        </svg>
+      </div>
+      <p class="hud-note" id="hud-note" role="status"></p>
+      <div class="hud-toggles">
+        <button class="icon-btn" id="hud-sound" type="button" aria-pressed="true" aria-label="Night sounds">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4Z" /><path class="on" d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" /></svg>
+        </button>
+        <button class="icon-btn" id="hud-voice" type="button" aria-pressed="true" aria-label="Hear Betaal's voice">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14v10H10l-5 4V5Z" /><path class="on" d="M9 9.5h6M9 12h4" /></svg>
+        </button>
+      </div>
+    </footer>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
